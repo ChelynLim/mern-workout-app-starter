@@ -1,5 +1,5 @@
-const WorkoutDetails = ({ workout }) => {
-
+const WorkoutDetails = async ({ workout }) => {
+  await fetch(`${process.env.REACT_APP_API_URL}/api/workouts/${workout._id}`)
 
     return (
       <div className="workout-details">
@@ -10,7 +10,6 @@ const WorkoutDetails = ({ workout }) => {
       </div>
     )
   }
-
   
 export default WorkoutDetails;
   
