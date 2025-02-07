@@ -1,34 +1,36 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
-import Home from './Pages/Home';
-import Navbar from './components/Navbar';
-import Login from './Pages/Login';
-import Signup from './Pages/Signup';
-import PrivateRoute from './components/PrivateRoute';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useAuthContext } from './hooks/useAuthContext'
+
+// pages & components
+import Home from './Pages/Home'
+import Login from './Pages/Login'
+import Signup from './Pages/SIgnup'
+import Navbar from './components/Navbar'
 
 function App() {
+  const { user } = useAuthContext()
+
   return (
     <div className="App">
-      <AuthProvider>
-        <BrowserRouter>
-          <Navbar />
-          <div className="pages">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route
-                path="/protected"
-                element={
-                  <PrivateRoute>
-                    <ProtectedComponent />
-                  </PrivateRoute>
-                }
-              />
-            </Routes>
-          </div>
-        </BrowserRouter>
-      </AuthProvider>
+      <BrowserRouter>
+        <Navbar />
+        <div className="pages">
+          <Routes>
+            <Route 
+              path="/" 
+              element={user ? <Home /> : <Navigate to="/login" />} 
+            />
+            <Route 
+              path="/login" 
+              element={!user ? <Login /> : <Navigate to="/" />} 
+            />
+            <Route 
+              path="/signup" 
+              element={!user ? <Signup /> : <Navigate to="/" />} 
+            />
+          </Routes>
+        </div>
+      </BrowserRouter>
     </div>
   );
 }
